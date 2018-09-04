@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html layout:decorator="layouts/default">
+  <head>
+    <title>Welcome</title>
+  </head>
+  <body>
+    <div layout:fragment="content">
+    <div th:switch="${registered}"> 
+  		<p th:case="true">Account crée avec succès.<br/>
+  	    Mais comme j'ai pas envie de coder de email verification, essaye juste de te connecter<a th:href="@{/login}">ici</a> avec le mots de passe: <b th:text="${password}"></b></p>
+        <form th:case="*" action="#" th:action="@{/register}" th:object="${user}" method="post">
+            <table>
+                <tr>
+                    <td>Username:</td>
+                    <td><input type="text" th:field="*{username}" /></td>
+                    <td th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Name Error</td>
+                </tr>
+                <tr>
+                    <td><button type="submit">Submit</button></td>
+                </tr>
+            </table>
+        </form>
+    </div>
+    </div>
+  </body>
+</html>

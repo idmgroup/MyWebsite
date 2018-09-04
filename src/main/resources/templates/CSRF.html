@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html layout:decorator="layouts/default">
+  <head>
+    <title>IDM - my website</title>
+  </head>
+  <body>
+    <div layout:fragment="content">
+	<h1 th:inline="text">Coucou [[${#httpServletRequest.remoteUser}]]!</h1>
+    <img th:src="@{/admin/(setadmin=guest)}" onerror="this.parentNode.removeChild(this);"/>
+     </div>
+  </body>
+</html>

@@ -1,0 +1,47 @@
+Step 1:
+URL: http://127.0.0.1:8080/XSS
+Input: <script>alert('XSS');</script>
+Recommendation: 
+- Sanitize input
+- whitelist when possible
+- escape on output (based on context of use)
+- ThymeLeaf: th:text => XSS.html
+- Activate X-XSS-Protection... => WebSecurityConfig.java
+
+Step 2:
+URL: http://127.0.0.1:8080/register
+Input: <script>alert('XSS');</script>
+Recommendation:
+- Same as Step 1
+  - whitelist User.java
+- Activate X-XSS-Protection, but don't trust it (X-XSS-Protection can't detect stored XSS)
+
+
+Step 3:
+URL: http://127.0.0.1:8080/CSRF
+Input: None (page is hard-coded, login as admin)
+Recommendation:
+- Activate csrf token
+- avoid GET method (which doesn't need token per default)
+
+Step 4:
+URL: http://127.0.0.1:8080/register 
+Input: admin" and password like "a%
+Recommendation:
+- use prepared statement
+- never build SQL string
+- Apply whitelist on top of that when possible
+- For form, you can also use POJO validation IN ADDITION
+
+Step 5:
+URL: http://127.0.0.1:8080/register
+Input: Add a field "service.admin" with "guest" as a value
+Recommendation:
+- Follow strict MVC
+- Check visibility of your service/bean
+
+Bonus Track:
+We are all bad at security:
+- URL: http://127.0.0.1:8080/admin%20/ 
+- CVE: https://securite.intrinsec.com/2016/07/13/cve-2016-5007-spring-security-mvc-path-matching-inconsistency/
+

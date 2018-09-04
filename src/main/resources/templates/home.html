@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html layout:decorator="layouts/default">
+  <head>
+    <title>IDM - my website</title>
+  </head>
+  <body>
+    <div layout:fragment="content">
+     <ul>
+     	<li>XSS - <a th:href="@{/XSS}">Step 1</a></li>
+     	<li>Stored XSS - <a th:href="@{/register}">Step 2</a></li>
+     	<li>CSRF - <a th:href="@{/CSRF}">Step 3</a></li>
+     	<li>Injection - <a th:href="@{/register}">Step 4</a></li>
+     	<li>Insecure Direct Object Reference - <a th:href="@{/register}">Step 5</a></li>
+     </ul>
+    </div>
+  </body>
+</html>

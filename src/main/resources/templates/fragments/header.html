@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+  <head>
+  </head>
+  <body>
+    <div class="header" th:fragment="header">
+		<h1 class="header-heading">IDM - WebApp Security overview</h1>
+		<div class="nav-bar">
+			<ul class="nav">
+				<li><a th:href="@{/}">Home</a></li>
+				<li><a th:href="@{/users}">Users</a></li>
+				<li sec:authorize="!isAuthenticated()"><a th:href="@{/register}">Register</a></li>
+ 				<li sec:authorize="!isAuthenticated()"><a th:href="@{/login}">Login</a></li>
+				<li sec:authorize="isAuthenticated()"><a th:href="@{/profil}">Profil</a></li>				
+				<li sec:authorize="hasRole('ROLE_ADMIN')"><a th:href="@{/admin/}">Admin</a></li>
+			</ul>
+	    </div>
+	</div>
+  </body>
+</html>

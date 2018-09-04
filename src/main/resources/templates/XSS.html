@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html layout:decorator="layouts/default">
+  <head>
+    <title>IDM - my website</title>
+  </head>
+  <body>
+    <div layout:fragment="content">
+    Coucou <span th:utext="${userInput}"></span>
+    
+    <form action="#" th:action="@{/XSS}" method="post">
+        <table>
+            <tr>
+                <td><input type="text" name="u" id="u" /></td>
+                <td><button type="submit">Submit</button></td>
+            </tr>
+        </table>
+    </form>
+     </div>
+  </body>
+</html>

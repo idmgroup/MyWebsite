@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html layout:decorator="layouts/default">
+  <head>
+    <title>Welcome</title>
+  </head>
+  <body>
+    <div layout:fragment="content">
+<table>
+  <tr>
+    <th>Username</th>
+  </tr>
+  <tr th:each="user : ${users}">
+    <td th:utext="${user.value.username}">Admin</td>
+  </tr>
+</table>
+    </div>
+  </body>
+</html>

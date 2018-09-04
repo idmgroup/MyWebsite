@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html layout:decorator="layouts/default" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+  <head>
+    <title>Admin</title>
+  </head>
+  <body>
+    <div layout:fragment="content">
+        <h1>Admin</h1>
+        <form action="#" th:action="@{/admin/}" method="post">
+            <table>
+                <tr>
+                    <td>Recherche par username:</td>
+                    <td><input type="text" name="u" id="u" /></td>
+                    <td><button type="submit">Search</button></td>
+                </tr>
+            </table>
+        </form>
+
+        <p th:if="${error}" th:text="${error}"></p>
+        
+        <table th:if="${username}">
+            <tr>
+                <td>Username:</td>
+                <td th:text="${username}"></td>
+            </tr>
+            <tr>
+                <td>Password:</td>
+                <td th:text="${password}"></td>
+            </tr>
+            <tr>
+                <td>Role:</td>
+                <td th:text="${role}"></td>
+            </tr>
+            <tr>
+                <td>Set Admin:</td>
+                <td><a th:href="@{/admin/(setadmin=${username})}">X</a></td>
+            </tr>
+            
+        </table>
+    </div>
+  </body>
+</html>
