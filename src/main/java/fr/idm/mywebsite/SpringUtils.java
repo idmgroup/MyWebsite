@@ -1,4 +1,4 @@
-package fr.idm.myWebsite;
+package fr.idm.mywebsite;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;

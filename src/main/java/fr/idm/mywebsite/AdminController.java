@@ -1,4 +1,4 @@
-package fr.idm.myWebsite;
+package fr.idm.mywebsite;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,12 +13,27 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 
 public class AdminController extends WebMvcConfigurerAdapter {
 
+    private static final String ADMINHOME = "admin/home";
+
     @Autowired
     UserService service;
 
+    @RequestMapping(value = "/admin/", params = { "setadmin" }, method = RequestMethod.GET)
+    public String setAdmin(@RequestParam(value = "setadmin") String username, Model model) {
+        if (service.userExists(username)) {
+            UserDetails ud = service.loadUserByUsername(username);
+            service.setAdmin(ud.getUsername());
+            model.addAttribute("username", ud.getUsername());
+            model.addAttribute("password", ud.getPassword());
+        } else {
+            model.addAttribute("error", "Are you kidding me ?");
+        }
+        return ADMINHOME;
+    }
+
     @RequestMapping(value = "/admin/**", method = RequestMethod.GET)
     public String showHome() {
-        return "admin/home";
+        return ADMINHOME;
     }
 
     @RequestMapping(value = "/admin/", params = { "u" }, method = RequestMethod.POST)
@@ -31,20 +46,7 @@ public class AdminController extends WebMvcConfigurerAdapter {
         } else {
             model.addAttribute("error", "This search return no result.");
         }
-        return "admin/home";
-    }
-
-    @RequestMapping(value = "/admin/", params = { "setadmin" }, method = RequestMethod.GET)
-    public String setAdmin(@RequestParam(value = "setadmin") String username, Model model) {
-        if (service.userExists(username)) {
-            UserDetails ud = service.loadUserByUsername(username);
-            service.setAdmin(ud.getUsername());
-            model.addAttribute("username", ud.getUsername());
-            model.addAttribute("password", ud.getPassword());
-        } else {
-            model.addAttribute("error", "Are you kidding me ?");
-        }
-        return "admin/home";
+        return ADMINHOME;
     }
 
 }

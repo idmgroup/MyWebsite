@@ -1,6 +1,4 @@
-package fr.idm.myWebsite;
-
-import java.sql.SQLException;
+package fr.idm.mywebsite;
 
 import javax.validation.Valid;
 
@@ -28,25 +26,6 @@ public class WebController extends WebMvcConfigurerAdapter {
         registry.addViewController("/CSRF").setViewName("CSRF");
     }
 
-    @RequestMapping(value = "/register", method = RequestMethod.GET)
-    public String showForm(User person) {
-        return "form";
-    }
-
-    @RequestMapping(value = "/users", method = RequestMethod.GET)
-    public String showUsers(Model model) throws SQLException {
-
-        /*
-         * Field usersMapField = ReflectionUtils.findField(InMemoryUserDetailsManager.class, "users");
-         * ReflectionUtils.makeAccessible(usersMapField); Map<String, UserDetails> map = (Map<String, UserDetails>)
-         * ReflectionUtils.getField(usersMapField, inMemoryUserDetailsManager); for (Map.Entry<String, UserDetails> user
-         * : map.entrySet()) { System.out.println(user.getKey() + "/" + user.getValue().getUsername()); }
-         */
-        model.addAttribute("users", service.getUsers());
-
-        return "users";
-    }
-
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     public String checkPersonInfo(@Valid User user, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
@@ -67,5 +46,16 @@ public class WebController extends WebMvcConfigurerAdapter {
         model.addAttribute("registered", true);
         model.addAttribute("password", pwd);
         return "form";
+    }
+
+    @RequestMapping(value = "/register", method = RequestMethod.GET)
+    public String showForm(User person) {
+        return "form";
+    }
+
+    @RequestMapping(value = "/users", method = RequestMethod.GET)
+    public String showUsers(Model model) {
+        model.addAttribute("users", service.getUsers());
+        return "users";
     }
 }

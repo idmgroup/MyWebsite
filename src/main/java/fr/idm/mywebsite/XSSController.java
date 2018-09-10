@@ -1,4 +1,4 @@
-package fr.idm.myWebsite;
+package fr.idm.mywebsite;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

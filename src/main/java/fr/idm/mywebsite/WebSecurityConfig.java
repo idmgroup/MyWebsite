@@ -1,4 +1,4 @@
-package fr.idm.myWebsite;
+package fr.idm.mywebsite;
 
 import java.sql.SQLException;
 import java.util.Properties;
@@ -16,6 +16,11 @@ import org.springframework.security.web.header.writers.StaticHeadersWriter;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(userDetailsManager());
+    }
+
+    @Override
     protected void configure(HttpSecurity http) throws Exception {
      // @formatter:off
         http.authorizeRequests()
@@ -28,11 +33,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         .headers()
           .addHeaderWriter(new StaticHeadersWriter("X-XSS-Protection","0"));
      // @formatter:oN
-    }
-
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsManager());
     }
 
     @Bean

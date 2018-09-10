@@ -1,4 +1,4 @@
-package fr.idm.myWebsite;
+package fr.idm.mywebsite;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -43,6 +43,27 @@ public class SQLiteUserDetailsManager implements UserDetailsManager {
 
     }
 
+    @Override
+    public void changePassword(String oldPassword, String newPassword) {
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+    @Override
+    public void createUser(UserDetails user) {
+        Assert.isTrue(!userExists(user.getUsername()));
+        try {
+            String createUser = "insert into users values( ? , ? ,? )";
+            PreparedStatement ps = connection.prepareStatement(createUser);
+            ps.setString(1, user.getUsername());
+            ps.setString(2, user.getPassword());
+            ps.setString(3, user.getAuthorities().toString());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
+
     private void dbInit() throws SQLException {
         connection = DriverManager.getConnection("jdbc:sqlite::memory:");
         Statement stmt = connection.createStatement();
@@ -50,7 +71,33 @@ public class SQLiteUserDetailsManager implements UserDetailsManager {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String psUsername) throws UsernameNotFoundException {
+    public void deleteUser(String username) {
+        try {
+            String deleteUser = "delete * from users where username= ?";
+            PreparedStatement ps = connection.prepareStatement(deleteUser);
+            ps.setString(1, username);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+        }
+    }
+
+    public Map<String, UserDetails> getUsers() {
+        Statement stmt;
+        Map<String, UserDetails> users = new HashMap<String, UserDetails>();
+        try {
+            stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery("select username from users");
+            while (rs.next()) {
+                String username = rs.getString("username");
+                users.put(username, loadUserByUsername(username));
+            }
+        } catch (SQLException e) {
+        }
+        return users;
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String psUsername) {
         User user = null;
         String getUser = "select username, password, roles from users where username =  ?";
         PreparedStatement ps;
@@ -72,7 +119,6 @@ public class SQLiteUserDetailsManager implements UserDetailsManager {
                 user = new User(username, password, authoritiesAsStrings);
             }
         } catch (SQLException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
@@ -81,22 +127,6 @@ public class SQLiteUserDetailsManager implements UserDetailsManager {
         }
 
         return user;
-    }
-
-    @Override
-    public void createUser(UserDetails user) {
-        Assert.isTrue(!userExists(user.getUsername()));
-        try {
-            String createUser = "insert into users values( ? , ? ,? )";
-            PreparedStatement ps = connection.prepareStatement(createUser);
-            ps.setString(1, user.getUsername());
-            ps.setString(2, user.getPassword());
-            ps.setString(3, user.getAuthorities().toString());
-            ps.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
     }
 
     @Override
@@ -115,22 +145,6 @@ public class SQLiteUserDetailsManager implements UserDetailsManager {
     }
 
     @Override
-    public void deleteUser(String username) {
-        try {
-            String deleteUser = "delete * from users where username= ?";
-            PreparedStatement ps = connection.prepareStatement(deleteUser);
-            ps.setString(1, username);
-            ps.executeUpdate();
-        } catch (SQLException e) {
-        }
-    }
-
-    @Override
-    public void changePassword(String oldPassword, String newPassword) {
-        throw new UnsupportedOperationException("Not implemented yet");
-    }
-
-    @Override
     public boolean userExists(String username) {
         Statement stmt;
         try {
@@ -142,21 +156,6 @@ public class SQLiteUserDetailsManager implements UserDetailsManager {
             // an error, then its not an existing user
         }
         return false;
-    }
-
-    public Map<String, UserDetails> getUsers() {
-        Statement stmt;
-        Map<String, UserDetails> users = new HashMap<String, UserDetails>();
-        try {
-            stmt = connection.createStatement();
-            ResultSet rs = stmt.executeQuery("select username from users");
-            while (rs.next()) {
-                String username = rs.getString("username");
-                users.put(username, loadUserByUsername(username));
-            }
-        } catch (SQLException e) {
-        }
-        return users;
     }
 
 }
